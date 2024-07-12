@@ -1,6 +1,8 @@
 import uuid
 from typing import Dict
 
+from src.drivers.email_sender import send_mail
+
 class TripCreator:
   def __init__(self, trips_repository, emails_repository) -> None:
     self.__trips_repository = trips_repository
@@ -23,6 +25,12 @@ class TripCreator:
             "trip_id": trip_id,
             "email": email
           })
+
+      send_mail(
+        [body['owner_email']],
+        f'https://localhost:3000/trips/{trip_id}/confirm'
+        )
+      
       return {
         "body": { "id": trip_id },
         "status_code": 201
